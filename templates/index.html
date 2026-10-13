@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fertilizer Recommendation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <main class="card">
+    <header class="header">
+      <div class="badge">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 22c5-4 8-8.5 8-13a8 8 0 1 0-16 0c0 4.5 3 9 8 13Z" stroke="currentColor" stroke-width="1.6"/><path d="M12 12c0-2.5 1.5-4.5 4-5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </div>
+      <h1>Fertilizer Recommendation</h1>
+      <p>Enter your field's readings for a recommended blend.</p>
+    </header>
+
+    <form id="fert-form">
+
+      <div class="group">
+        <div class="group-title">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v9m0 0a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM9 6l3-3 3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Climate</span>
+        </div>
+        <div class="row row-3">
+          <div class="field">
+            <label for="Temparature">Temperature</label>
+            <div class="input-wrap">
+              <input type="number" step="any" id="Temparature" name="Temparature" required placeholder="26" />
+              <span class="suffix">°C</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="Humidity">Humidity</label>
+            <div class="input-wrap">
+              <input type="number" step="any" id="Humidity" name="Humidity" required placeholder="52" />
+              <span class="suffix">%</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="Moisture">Soil Moisture</label>
+            <div class="input-wrap">
+              <input type="number" step="any" id="Moisture" name="Moisture" required placeholder="38" />
+              <span class="suffix">%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Soil Nutrients</span>
+        </div>
+        <div class="row row-3">
+          <div class="field">
+            <label for="Nitrogen">Nitrogen <em>N</em></label>
+            <div class="input-wrap">
+              <input type="number" step="any" id="Nitrogen" name="Nitrogen" required placeholder="37" />
+              <span class="suffix">kg/ha</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="Phosphorous">Phosphorous <em>P</em></label>
+            <div class="input-wrap">
+              <input type="number" step="any" id="Phosphorous" name="Phosphorous" required placeholder="0" />
+              <span class="suffix">kg/ha</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="Potassium">Potassium <em>K</em></label>
+            <div class="input-wrap">
+              <input type="number" step="any" id="Potassium" name="Potassium" required placeholder="0" />
+              <span class="suffix">kg/ha</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 21V10l8-6 8 6v11" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 21v-6h6v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          <span>Field</span>
+        </div>
+        <div class="row row-2">
+          <div class="field">
+            <label for="Soil Type">Soil Type</label>
+            <div class="select-wrap">
+              <select id="Soil Type" name="Soil Type" required>
+                <option value="" disabled selected>Loading…</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="Crop Type">Crop Type</label>
+            <div class="select-wrap">
+              <select id="Crop Type" name="Crop Type" required>
+                <option value="" disabled selected>Loading…</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" id="submit-btn">
+        <span class="btn-text">Recommend Fertilizer</span>
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="spinner hidden" id="spinner"></span>
+      </button>
+    </form>
+
+    <p id="error" class="error hidden" role="alert"></p>
+
+    <section id="result" class="result hidden" aria-live="polite">
+      <div class="result-head">
+        <div class="result-check">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <p class="result-label">Recommended Fertilizer</p>
+          <p class="result-name" id="result-name">—</p>
+        </div>
+      </div>
+
+      <span id="match-badge" class="match-badge hidden"></span>
+
+      <div class="confidence-wrap">
+        <div class="confidence-track">
+          <div class="confidence-fill" id="confidence-fill"></div>
+        </div>
+        <span class="confidence-pct" id="confidence-pct"></span>
+      </div>
+
+      <div id="alt-wrap" class="alt-wrap">
+        <p class="alt-title">Other close matches</p>
+        <ul id="alt-list"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
